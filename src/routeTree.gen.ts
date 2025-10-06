@@ -9,19 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MainRouteImport } from './routes/main'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactUsIndexRouteImport } from './routes/contact-us/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
-import { Route as AboutAboutIdRouteImport } from './routes/about/$aboutId'
 
-const MainRoute = MainRouteImport.update({
-  id: '/main',
-  path: '/main',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactUsIndexRoute = ContactUsIndexRouteImport.update({
+  id: '/contact-us/',
+  path: '/contact-us/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutIndexRoute = AboutIndexRouteImport.update({
@@ -29,60 +28,51 @@ const AboutIndexRoute = AboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutAboutIdRoute = AboutAboutIdRouteImport.update({
-  id: '/about/$aboutId',
-  path: '/about/$aboutId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/main': typeof MainRoute
-  '/about/$aboutId': typeof AboutAboutIdRoute
   '/about': typeof AboutIndexRoute
+  '/contact-us': typeof ContactUsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/main': typeof MainRoute
-  '/about/$aboutId': typeof AboutAboutIdRoute
   '/about': typeof AboutIndexRoute
+  '/contact-us': typeof ContactUsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/main': typeof MainRoute
-  '/about/$aboutId': typeof AboutAboutIdRoute
   '/about/': typeof AboutIndexRoute
+  '/contact-us/': typeof ContactUsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/main' | '/about/$aboutId' | '/about'
+  fullPaths: '/' | '/about' | '/contact-us'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/main' | '/about/$aboutId' | '/about'
-  id: '__root__' | '/' | '/main' | '/about/$aboutId' | '/about/'
+  to: '/' | '/about' | '/contact-us'
+  id: '__root__' | '/' | '/about/' | '/contact-us/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MainRoute: typeof MainRoute
-  AboutAboutIdRoute: typeof AboutAboutIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
+  ContactUsIndexRoute: typeof ContactUsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/main': {
-      id: '/main'
-      path: '/main'
-      fullPath: '/main'
-      preLoaderRoute: typeof MainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-us/': {
+      id: '/contact-us/'
+      path: '/contact-us'
+      fullPath: '/contact-us'
+      preLoaderRoute: typeof ContactUsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about/': {
@@ -92,21 +82,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about/$aboutId': {
-      id: '/about/$aboutId'
-      path: '/about/$aboutId'
-      fullPath: '/about/$aboutId'
-      preLoaderRoute: typeof AboutAboutIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MainRoute: MainRoute,
-  AboutAboutIdRoute: AboutAboutIdRoute,
   AboutIndexRoute: AboutIndexRoute,
+  ContactUsIndexRoute: ContactUsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
